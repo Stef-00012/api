@@ -1,0 +1,38 @@
+{
+  "daily": {
+    "songs": {
+      "total": 69,
+      "different": 68
+    },
+    "artists": {
+      "different": 2
+    }
+  },
+  "monthly": {
+    "songs": {
+      "total": 6316,
+      "different": 1097
+    },
+    "artists": {
+      "different": 248
+    }
+  },
+  "yearly": {
+    "songs": {
+      "total": 54714,
+      "different": 2922
+    },
+    "artists": {
+      "different": 670
+    }
+  },
+  "total": {
+    "songs": {
+      "total": 128655,
+      "different": 8580
+    },
+    "artists": {
+      "different": 1368
+    }
+  }
+}
