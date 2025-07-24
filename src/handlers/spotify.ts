@@ -73,25 +73,29 @@ async function updateSpotifyData() {
 	for (const _start in startStrings) {
 		const start = _start as keyof typeof startStrings;
 
-		const songsData = await axios.get(
-			`${process.env.YOUR_SPOTIFY_API_URL}/spotify/songs_per?start=${startStrings[start]}&end=${endString}&timeSplit=all&token=${process.env.YOUR_SPOTIFY_API_TOKEN}`,
-		);
+		try {
+			const songsData = await axios.get(
+				`${process.env.YOUR_SPOTIFY_API_URL}/spotify/songs_per?start=${startStrings[start]}&end=${endString}&timeSplit=all&token=${process.env.YOUR_SPOTIFY_API_TOKEN}`,
+			);
 
-		const artistsData = await axios.get(
-			`${process.env.YOUR_SPOTIFY_API_URL}/spotify/different_artists_per?start=${startStrings[start]}&end=${endString}&timeSplit=all&token=${process.env.YOUR_SPOTIFY_API_TOKEN}`,
-		);
+			const artistsData = await axios.get(
+				`${process.env.YOUR_SPOTIFY_API_URL}/spotify/different_artists_per?start=${startStrings[start]}&end=${endString}&timeSplit=all&token=${process.env.YOUR_SPOTIFY_API_TOKEN}`,
+			);
 
-		if (songsData.data?.length) {
-			newData[start].songs = {
-				total: songsData.data[0].count,
-				different: songsData.data[0].differents,
-			};
-		}
+			if (songsData.data?.length) {
+				newData[start].songs = {
+					total: songsData.data[0].count,
+					different: songsData.data[0].differents,
+				};
+			}
 
-		if (artistsData.data?.length) {
-			newData[start].artists = {
-				different: artistsData.data[0].differents,
-			};
+			if (artistsData.data?.length) {
+				newData[start].artists = {
+					different: artistsData.data[0].differents,
+				};
+			}
+		} catch(_e) {
+			console.error("Failed to fetch spotify data")
 		}
 	}
 

@@ -1,38 +1,38 @@
 {
   "daily": {
     "songs": {
-      "total": 69,
-      "different": 68
+      "total": 164,
+      "different": 98
     },
     "artists": {
-      "different": 2
+      "different": 22
     }
   },
   "monthly": {
     "songs": {
-      "total": 6316,
-      "different": 1097
+      "total": 5810,
+      "different": 1005
     },
     "artists": {
-      "different": 248
+      "different": 238
     }
   },
   "yearly": {
     "songs": {
-      "total": 54714,
-      "different": 2922
+      "total": 60986,
+      "different": 3318
     },
     "artists": {
-      "different": 670
+      "different": 783
     }
   },
   "total": {
     "songs": {
-      "total": 128655,
-      "different": 8580
+      "total": 137950,
+      "different": 8925
     },
     "artists": {
-      "different": 1368
+      "different": 1465
     }
   }
 }

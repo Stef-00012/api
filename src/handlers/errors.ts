@@ -24,12 +24,20 @@ process.on("uncaughtException", async (err) => {
 
 	fs.writeFileSync(errorPath, errorMessage);
 
-	await axios.post(`${process.env.NTFY_URL}`, {
-		topic: "apiErrors",
-		priority: 4, // https://docs.ntfy.sh/publish/#message-priority
-		title: "There was an error in the personal API",
-		message: err.stack,
-	});
+	try {
+		await axios.post(`${process.env.NTFY_URL}`, {
+			topic: "apiErrors",
+			priority: 4, // https://docs.ntfy.sh/publish/#message-priority
+			title: "There was an error in the personal API",
+			message: err.stack,
+		}, {
+			headers: {
+				Authorization: `Bearer ${process.env.NTFY_TOKEN}`,
+			}
+		});
+	} catch(e) {
+		console.error("Failed to send error notification (uncaughtException):", e);
+	}
 });
 
 process.on("unhandledRejection", async (reason, _promise) => {
@@ -52,10 +60,18 @@ process.on("unhandledRejection", async (reason, _promise) => {
 
 	fs.writeFileSync(errorPath, errorMessage);
 
-	await axios.post(`${process.env.NTFY_URL}`, {
-		topic: "apiErrors",
-		priority: 4, // https://docs.ntfy.sh/publish/#message-priority
-		title: "There was an error in the personal API",
-		message: reason,
-	});
+	try {
+		await axios.post(`${process.env.NTFY_URL}`, {
+			topic: "apiErrors",
+			priority: 4, // https://docs.ntfy.sh/publish/#message-priority
+			title: "There was an error in the personal API",
+			message: reason,
+		}, {
+			headers: {
+				Authorization: `Bearer ${process.env.NTFY_TOKEN}`,
+			}
+		});
+	} catch(e) {
+		console.error("Failed to send error notification (unhandledRejection):", e);
+	}
 });
