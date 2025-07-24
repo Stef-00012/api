@@ -1,6 +1,6 @@
-import axios from "axios";
-import fs from "node:fs";
+import { sendNotification } from "@/functions/sendNotification";
 import path from "node:path";
+import fs from "node:fs";
 
 const errorsDir = path.join(__dirname, "../errors");
 
@@ -25,16 +25,11 @@ process.on("uncaughtException", async (err) => {
 	fs.writeFileSync(errorPath, errorMessage);
 
 	try {
-		await axios.post(`${process.env.NTFY_URL}`, {
-			topic: "apiErrors",
+		await sendNotification("apiErrors", {
 			priority: 4, // https://docs.ntfy.sh/publish/#message-priority
 			title: "There was an error in the personal API",
 			message: err.stack,
-		}, {
-			headers: {
-				Authorization: `Bearer ${process.env.NTFY_TOKEN}`,
-			}
-		});
+		})
 	} catch(e) {
 		console.error("Failed to send error notification (uncaughtException):", e);
 	}
@@ -61,15 +56,10 @@ process.on("unhandledRejection", async (reason, _promise) => {
 	fs.writeFileSync(errorPath, errorMessage);
 
 	try {
-		await axios.post(`${process.env.NTFY_URL}`, {
-			topic: "apiErrors",
+		await sendNotification("apiErrors", {
 			priority: 4, // https://docs.ntfy.sh/publish/#message-priority
 			title: "There was an error in the personal API",
-			message: reason,
-		}, {
-			headers: {
-				Authorization: `Bearer ${process.env.NTFY_TOKEN}`,
-			}
+			message: String(reason),
 		});
 	} catch(e) {
 		console.error("Failed to send error notification (unhandledRejection):", e);

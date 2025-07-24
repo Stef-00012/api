@@ -1,10 +1,10 @@
 import type { Birthday } from "@/types/birthdays";
 import getNextDay from "@/functions/getNextDay";
 import cron from "node-cron";
-import axios from "axios";
 
 import _birthdays from "@/data/birthdays.json";
 import getCurrentDay from "@/functions/getCurrentDay";
+import { sendNotification } from "@/functions/sendNotification";
 const birthdays = _birthdays as Birthday[];
 
 cron.schedule("50 23 * * *", async () => {
@@ -27,15 +27,10 @@ cron.schedule("50 23 * * *", async () => {
             const names = birthdaysByTopic[topic];
 
             try {
-                await axios.post(`${process.env.NTFY_URL}`, {
-                    topic,
+                await sendNotification(topic, {
                     message: names.join(", "),
                     priority: 4, // https://docs.ntfy.sh/publish/#message-priority
-                    title: "Tomorrow (in 10 minutes) is someone's birhday!"
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${process.env.NTFY_TOKEN}`,
-                    }
+                    title: "Tomorrow (in 10 minutes) is someone's birthday!",
                 })
             } catch(_e) {
                 console.error(_e)
@@ -66,15 +61,10 @@ cron.schedule("00 7 * * *", async () => {
             const names = birthdaysByTopic[topic];
 
             try {
-                await axios.post(`${process.env.NTFY_URL}`, {
-                    topic,
+                await sendNotification(topic, {
                     message: names.join(", "),
                     priority: 4, // https://docs.ntfy.sh/publish/#message-priority
-                    title: "Tomorrow (in 10 minutes) is someone's birhday!"
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${process.env.NTFY_TOKEN}`,
-                    }
+                    title: "Today is someone's birthday!",
                 })
             } catch(_e) {
                 console.error(_e)
